@@ -1,0 +1,36 @@
+{
+  "name": "experimental",
+  "version": "0.0.1",
+  "description": cross platform way to retrieve experimental features",
+  "homepage": "https://github.com/WebReflection/experimental",
+  "keywords": [
+    "JavaScript",
+    "feature",
+    "ES5",
+    "ES6",
+    "JS",
+    "next",
+    "future",
+    "import",
+    "new"
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://mths.be/mit"
+    }
+  ],
+  "author": "Andrea Giammarchi <andrea.giammarchi@gmail.com> (http://webreflection.blogspot.com/)",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/WebReflection/experimental.git"
+  },
+  "main": "./src/experimental.js",
+  "engines": [
+    "node",
+    "rhino"
+  ],
+  "dependencies": {},
+  "devDependencies": {},
+  "optionalDependencies": {}
+}
