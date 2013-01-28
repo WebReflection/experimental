@@ -1,7 +1,7 @@
 {
   "name": "experimental",
   "version": "0.0.1",
-  "description": cross platform way to retrieve experimental features",
+  "description": "cross platform way to retrieve experimental features",
   "homepage": "https://github.com/WebReflection/experimental",
   "keywords": [
     "JavaScript",
