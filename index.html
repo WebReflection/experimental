@@ -58,31 +58,34 @@
           } catch(o_O) {}
         },
         findOut = function () {
-          value = input.value;
+          value = input.value.replace(trim, "");
           while (div.hasChildNodes()) {
             div.removeChild(div.lastChild);
           }
-          div.appendChild(
-            document.createTextNode(
-              experimental(window, value) ||
-              experimental(document, value) ||
-              experimental(document.documentElement, value) ||
-              experimental(input, value) ||
-              experimental(style, value) ||
-              experimental(navigator, value) ||
-              experimental(Array.prototype, value) ||
-              experimental(Boolean.prototype, value) ||
-              experimental(Date.prototype, value) ||
-              experimental(Function.prototype, value) ||
-              experimental(Number.prototype, value) ||
-              experimental(Object.prototype, value) ||
-              experimental(String.prototype, value) ||
-              lastChance(value) ||
-              "[not found]"
-            )
-          );
-          style[opacity] = 1;
+          if (value) {
+            div.appendChild(
+              document.createTextNode(
+                experimental(window, value) ||
+                experimental(document, value) ||
+                experimental(document.documentElement, value) ||
+                experimental(input, value) ||
+                experimental(style, value) ||
+                experimental(navigator, value) ||
+                experimental(Array.prototype, value) ||
+                experimental(Boolean.prototype, value) ||
+                experimental(Date.prototype, value) ||
+                experimental(Function.prototype, value) ||
+                experimental(Number.prototype, value) ||
+                experimental(Object.prototype, value) ||
+                experimental(String.prototype, value) ||
+                lastChance(value) ||
+                "[not found]"
+              )
+            );
+            style[opacity] = 1;
+          }
         },
+        trim = /^\s+|\s+$/g,
         body = $("body")[0],
         input = $("input")[0],
         div = $("div")[0],
@@ -101,7 +104,7 @@
       );
       /(?:#|\?)(.+)$/.test(location.href) && (
         input.value = RegExp.$1
-      ) && setTimeout(findOut, 100);
+      ) && setTimeout(findOut, div.offsetHeight ? 100 : 100);
     };
     </script>
   </head>
