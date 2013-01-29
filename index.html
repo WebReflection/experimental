@@ -1,154 +1,113 @@
-<!DOCTYPE html>
-<html>
-
+<!doctype html>
+<html manifest="cache.manifest.php">
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Experimental : cross platform way to retrieve experimental features" />
-
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>Experimental</title>
+    <title>experimental.js</title>
+    <meta http-equiv="content-language" content="en-US"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta names="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="description" content="minimalistic features detection"/>
+    <meta name="keywords" content="javascript,feature,detection,experimental"/>
+    <meta name="category" content="SW development"/>
+    <meta name="copyright" content="Andrea Giammarchi"/>
+    <meta name="author" content="Andrea Giammarchi"/>
+    <meta name="generator" content="TextMate"/>
+    <meta name="robots" content="ALL"/>
+    <style>
+    body, input {
+      font-family: sans-serif;
+      font-size: 16px;
+    }
+    body {
+      text-align: center;
+    }
+    input, div, a {
+      margin: 32px auto;
+    }
+    div {
+      margin-top: 16px;
+      font-weight: bold;
+      font-size: 18px;
+      height: 36px;
+    }
+    a {
+      font-size: 14px;
+      font-style: italic;
+      text-decoration: none;
+    }
+    </style>
+    <script>
+    /*! (C) Andrea Giammarchi - Mit Style License */
+    var define=define||Object,exports=this.exports||this;define(exports.experimental=function(e){var f="Khtml khtml O o MS ms Moz moz WebKit Webkit webKit webkit ".split(" "),j=e.hasOwnProperty;return function(c,d,k){var a;if(!(a=e[d])){a:{a=d;var g=a.charAt(0);a=a.slice(1);for(var h=f.length,b;h--;)if(b=f[h],b+=(b?g.toUpperCase():g)+a,b in c||("on"+b).toLowerCase()in c){a=b;break a}a=void 0}a=e[d]=a}k&&(a&&!j.call(c,d))&&(c[d]=c[a]);return a}}({}));
+    this.onload = function () {
+      var
+        $ = function (name) {
+          return document.getElementsByTagName(name);
+        },
+        keydown = function (e) {
+          input.placeholder = ""; // buggy in some device
+          clearTimeout(timer);
+          timer = setTimeout(findOut, 750);
+          if (style[opacity]) {
+            style[opacity] = 0;
+          }
+        },
+        lastChance = function (value) {
+          try {
+            return Function("return " + value)();
+          } catch(o_O) {}
+        },
+        findOut = function () {
+          value = input.value;
+          while (div.hasChildNodes()) {
+            div.removeChild(div.lastChild);
+          }
+          div.appendChild(
+            document.createTextNode(
+              experimental(window, value) ||
+              experimental(document, value) ||
+              experimental(document.documentElement, value) ||
+              experimental(input, value) ||
+              experimental(style, value) ||
+              experimental(navigator, value) ||
+              experimental(Array.prototype, value) ||
+              experimental(Boolean.prototype, value) ||
+              experimental(Date.prototype, value) ||
+              experimental(Function.prototype, value) ||
+              experimental(Number.prototype, value) ||
+              experimental(Object.prototype, value) ||
+              experimental(String.prototype, value) ||
+              lastChance(value) ||
+              "[not found]"
+            )
+          );
+          style[opacity] = 1;
+        },
+        body = $("body")[0],
+        input = $("input")[0],
+        div = $("div")[0],
+        style = div.style,
+        opacity = experimental(style, "opacity"),
+        timer, value
+      ;
+      style[opacity] = 0;
+      style[
+        experimental(style, "transition")
+      ] = opacity + " .5s ease-out";
+      input.addEventListener(
+        "keydown",
+        keydown,
+        true
+      );
+      /(?:#|\?)(.+)$/.test(location.href) && (
+        input.value = RegExp.$1
+      ) && setTimeout(findOut, 100);
+    };
+    </script>
   </head>
-
   <body>
-
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/WebReflection/experimental">View on GitHub</a>
-
-          <h1 id="project_title">Experimental</h1>
-          <h2 id="project_tagline">cross platform way to retrieve experimental features</h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/WebReflection/experimental/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/WebReflection/experimental/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h1>experimental</h1>
-
-<p>cross platform way to retrieve experimental features</p>
-
-<h3>API</h3>
-
-<p>It's quite straight forward:</p>
-
-<div class="highlight"><pre><span class="nx">experimental</span><span class="p">(</span>
-  <span class="nx">object</span><span class="o">:</span><span class="nb">Object</span><span class="p">,</span>    <span class="c1">// generic Object to check</span>
-  <span class="nx">property</span><span class="o">:</span><span class="nx">string</span>   <span class="c1">// generic property to check</span>
-  <span class="p">[,</span>
-    <span class="nx">assign</span><span class="o">:</span><span class="kr">boolean</span>  <span class="c1">// optional flag to set the value</span>
-  <span class="p">]</span>
-<span class="p">)</span><span class="o">:</span><span class="nx">string</span>            <span class="c1">// the found property or undefined</span>
-</pre></div>
-
-<p>The function returns the found string, if any, or undefined.</p>
-
-<h4>The Difference Using The Third Argument</h4>
-
-<p>By default, if we check <code>experimental(window, "requestAnimationFrame")</code> nothing will happen to the window object and, as example in Webkit browsers, the <code>"webkitRequestAnimationFrame"</code> string will be returned.</p>
-
-<p>If we use the third argument, not only that string is returned, but the property is attached with the desired name if not already attached before (avoids pointless getters/setters).</p>
-
-<div class="highlight"><pre><span class="c1">// check if present and use it</span>
-<span class="k">if</span> <span class="p">(</span><span class="nx">experimental</span><span class="p">(</span><span class="nb">window</span><span class="p">,</span> <span class="s2">"requestAnimationFrame"</span><span class="p">,</span> <span class="kc">true</span><span class="p">))</span> <span class="p">{</span>
-  <span class="c1">// in this case attached directly to the global</span>
-  <span class="c1">// so we can just use it all over</span>
-  <span class="nx">requestAnimationFrame</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span>
-<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-  <span class="nx">setTimeout</span><span class="p">(</span><span class="nx">callback</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
-<span class="p">}</span>
-</pre></div>
-
-<p>Without the third argument if there's nothing to attach since we are not looking for a method. An example could be some CSS property or an event type.</p>
-
-<div class="highlight"><pre><span class="k">this</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-  <span class="c1">//* add just a slash before this line ..</span>
-  <span class="kd">var</span> <span class="nx">body</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span>
-      <span class="nx">TRANSITION</span> <span class="o">=</span> <span class="nx">experimental</span><span class="p">(</span><span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">,</span> <span class="s2">"transition"</span><span class="p">),</span>
-      <span class="nx">TRANSITION_END</span> <span class="o">=</span> <span class="nx">experimental</span><span class="p">(</span><span class="nb">window</span><span class="p">,</span> <span class="s2">"transitionEnd"</span><span class="p">);</span>
-      <span class="c1">// please note it's camelCase, most likely</span>
-      <span class="c1">// will be webkitTransitionEnd</span>
-
-
-  <span class="k">if</span> <span class="p">(</span><span class="nx">TRANSITION</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// property found, this could be</span>
-    <span class="c1">// mozTransition or webkitTransition, etc</span>
-    <span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">[</span><span class="nx">TRANSITION</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"background-color 1s ease-out"</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="c1">// we can set this regardless</span>
-  <span class="c1">// in the worst case scenario it will never be fired</span>
-  <span class="c1">// however, Firefox does not behave properly</span>
-  <span class="c1">// so "transitionend" exists but it's hard to tell</span>
-  <span class="nx">body</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span>
-    <span class="nx">TRANSITION_END</span> <span class="o">||</span> <span class="c1">// webkit wants camelCase, so does opera</span>
-    <span class="s2">"transitionend"</span>
-    <span class="p">,</span>
-    <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">alert</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">type</span><span class="p">);</span>
-    <span class="p">},</span>
-    <span class="kc">false</span>
-  <span class="p">);</span>
-
-  <span class="c1">// later on ...</span>
-  <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-    <span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="s2">"blue"</span><span class="p">;</span>
-  <span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
-<span class="p">}</span>
-</pre></div>
-
-<h3>Some Generic Example</h3>
-
-<div class="highlight"><pre><span class="nx">alert</span><span class="p">([</span>
-  <span class="c1">// new stuff, if present</span>
-  <span class="nx">experimental</span><span class="p">(</span><span class="nb">window</span><span class="p">,</span> <span class="s2">"indexedDB"</span><span class="p">),</span>
-  <span class="nx">experimental</span><span class="p">(</span><span class="nb">window</span><span class="p">,</span> <span class="s2">"URL"</span><span class="p">),</span>
-  <span class="nx">experimental</span><span class="p">(</span><span class="nb">window</span><span class="p">,</span> <span class="s2">"performance"</span><span class="p">),</span>
-  <span class="nx">experimental</span><span class="p">(</span><span class="nb">window</span><span class="p">,</span> <span class="s2">"performance"</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
-  <span class="nx">experimental</span><span class="p">(</span>
-    <span class="nb">window</span><span class="p">[</span>
-      <span class="nx">experimental</span><span class="p">(</span><span class="nb">window</span><span class="p">,</span> <span class="s2">"performance"</span><span class="p">)</span>
-    <span class="p">],</span>
-    <span class="s2">"timing"</span>
-  <span class="p">),</span>
-  <span class="c1">// direct method</span>
-  <span class="nx">experimental</span><span class="p">(</span><span class="nb">window</span><span class="p">,</span> <span class="s2">"requestAnimationFrame"</span><span class="p">,</span> <span class="kc">true</span><span class="p">),</span>
-  <span class="nx">experimental</span><span class="p">(</span><span class="nb">document</span><span class="p">,</span> <span class="s2">"readyStateChange"</span><span class="p">),</span>
-  <span class="nx">experimental</span><span class="p">(</span><span class="nb">window</span><span class="p">,</span> <span class="s2">"transitionEnd"</span><span class="p">),</span>
-  <span class="nx">experimental</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">.</span><span class="nx">style</span><span class="p">,</span> <span class="s2">"transition"</span><span class="p">)</span>
-<span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s2">"\n"</span><span class="p">));</span>
-</pre></div>
-
-<h3>node.js</h3>
-
-<pre><code>npm install experimental -g
-</code></pre>
-
-<p>Then in any JS file ...</p>
-
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">experimental</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'experimental'</span><span class="p">).</span><span class="nx">experimental</span><span class="p">;</span>
-</pre></div>
-
-<p>That's pretty much it.</p>
-      </section>
-    </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Experimental maintained by <a href="https://github.com/WebReflection">WebReflection</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-
-    
-
+    <input placeholder="write a feature" />
+    <div></div>
+    <a href="https://github.com/WebReflection/experimental#experimental">experimental.js</a>
   </body>
 </html>
