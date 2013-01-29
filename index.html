@@ -93,8 +93,8 @@
         opacity = experimental(style, "opacity"),
         timer, value
       ;
-      div.appendChild(document.createTextNode("&nbsp;"));
       style[opacity] = 0;
+      div.appendChild(document.createTextNode(" "));
       style[
         experimental(style, "transition")
       ] = opacity + " .5s ease-out";
