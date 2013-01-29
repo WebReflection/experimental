@@ -7,10 +7,11 @@ define(
     /*! (C) Andrea Giammarchi - Mit Style License */
     var
       prefixes = [
-        "O",    "o",
-        "MS",   "ms",
-        "Moz",  "moz",
-        "WebKit", "Webkit", "webKit",
+        "Khtml", "khtml",
+        "O",     "o",
+        "MS",    "ms",
+        "Moz",   "moz",
+        "WebKit","Webkit", "webKit",
         "webkit",
         ""
       ],
