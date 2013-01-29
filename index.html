@@ -28,7 +28,6 @@
       margin-top: 16px;
       font-weight: bold;
       font-size: 18px;
-      height: 36px;
     }
     a {
       font-size: 14px;
@@ -94,6 +93,7 @@
         timer, value
       ;
       style[opacity] = 0;
+      div.appendChild(document.createTextNode(""));
       style[
         experimental(style, "transition")
       ] = opacity + " .5s ease-out";
@@ -104,7 +104,7 @@
       );
       /(?:#|\?)(.+)$/.test(location.href) && (
         input.value = RegExp.$1
-      ) && setTimeout(findOut, div.offsetHeight ? 100 : 100);
+      ) && setTimeout(findOut, 0);
     };
     </script>
   </head>
