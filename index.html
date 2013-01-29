@@ -28,6 +28,7 @@
       margin-top: 16px;
       font-weight: bold;
       font-size: 18px;
+      height: 36px;
     }
     a {
       font-size: 14px;
@@ -92,8 +93,8 @@
         opacity = experimental(style, "opacity"),
         timer, value
       ;
+      div.appendChild(document.createTextNode("&nbsp;"));
       style[opacity] = 0;
-      div.appendChild(document.createTextNode(""));
       style[
         experimental(style, "transition")
       ] = opacity + " .5s ease-out";
