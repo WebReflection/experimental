@@ -1,9 +1,5 @@
-var
-  define = define || Object,
-  exports = this.exports || this
-;
-define(
-  exports.experimental = function (cache){
+(this.define || Object)(
+  (this.exports || this).experimental = function(cache){
     /*! (C) Andrea Giammarchi - Mit Style License */
     var
       prefixes = [
@@ -15,7 +11,16 @@ define(
         "webkit",
         ""
       ],
-      hasOwnProperty = cache.hasOwnProperty
+      hasPrefix = new RegExp("\\b(?:" + prefixes.join("|").slice(0, -1) + ")\\b"),
+      hasOwnProperty = cache.hasOwnProperty,
+      reUp = /-([a-z])/g,
+      reDown = /([A-Z])/g,
+      placeUp = function (m, c) {
+        return c.toUpperCase();
+      },
+      placeDown = function (m, c) {
+        return "-" + c.toLowerCase();
+      }
     ;
     function find(object, what) {
       for(var
@@ -35,11 +40,26 @@ define(
       }
     }
     return function experimental(object, what, assign) {
-      var result = cache[what] || (
-        cache[what] = find(object, what)
-      );
-      if (assign && result && !hasOwnProperty.call(object, what)) {
-        object[what] = object[result];
+      var
+        key = (assign === "css") + what,
+        result = cache[key] || (
+          cache[key] = find(object, what.replace(reUp, placeUp))
+        );
+      switch(assign) {
+        case 1:
+        case true:
+          if (result && !hasOwnProperty.call(object, what)) {
+            object[what] = object[result];
+          }
+          break;
+        case "css":
+          if (result) {
+            result = result.replace(reDown, placeDown);
+            if (hasPrefix.test(result)) {
+              result = "-" + result;
+            }
+          }
+          break;
       }
       return result;
     };

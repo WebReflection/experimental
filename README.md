@@ -13,7 +13,10 @@ experimental(
   object:Object,    // generic Object to check
   property:string   // generic property to check
   [,
-    assign:boolean  // optional flag to set the value
+    assign:boolean|string
+                    // optional flag to set the value in "js"
+                    // "js" as default "js" check
+                    // "css" if property is a CSS one
   ]
 ):string            // the found property or undefined
 ```
@@ -95,7 +98,18 @@ alert([
   experimental(window, "requestAnimationFrame", true),
   experimental(document, "readyStateChange"),
   experimental(window, "transitionEnd"),
-  experimental(document.documentElement.style, "transition")
+  experimental(document.documentElement.style, "transition"),
+  
+  // CSS
+  experimental(document.documentElement.style, "transform", "css"),
+  // -webkit-transform
+  // -moz-transform
+  // etc ..
+  // JS
+  experimental(document.documentElement.style, "transition", "js")
+  // webkitTransition
+  // mozTransition
+  // etc ...
 ].join("\n"));
 ```
 
